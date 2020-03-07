@@ -1,3 +1,9 @@
+"""
+	This file travereses the entire chromium project and finds the c/c++ codes
+
+	@author: Abhishek Chatterjee (imdeepmind)
+"""
+
 from os import listdir
 from os.path import isfile, join
 import random
