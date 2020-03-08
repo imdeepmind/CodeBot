@@ -1,3 +1,9 @@
+"""
+	This file generate sequences from the code and saves it into a sqlite file
+
+	@author: Abhishek Chatterjee (imdeepmind)
+"""
+
 import sqlite3
 import random
 from tqdm import tqdm
