@@ -2,6 +2,8 @@ import sqlite3
 import numpy as np
 
 train_couter = 0
+validation_counter = 0
+test_counter = 0
 
 conn = sqlite3.connect('data/code.db')
 c = conn.cursor()
@@ -46,6 +48,54 @@ def train_generator(batch_size):
 			sequences.append(temp)
 			nexts.append(ord(next))
 
-		print(sequences, nexts)
+		yield ont_hot(sequences, nexts, batch_size)
+
+def validation_generator(batch_size):
+	global validation_counter
+
+	while True:
+		sql = f"SELECT sequence, next FROM code_sequences WHERE state = 'tr' LIMIT {batch_size} OFFSET {batch_size * validation_counter}"
+
+		validation_counter += 1
+
+		c.execute(sql)
+
+		rows = c.fetchall()
+
+		sequences = []
+		nexts = []
+
+		for sequence, next in rows:
+			temp = []
+			for char in sequence:
+				temp.append(ord(char))
+
+			sequences.append(temp)
+			nexts.append(ord(next))
+
+		yield ont_hot(sequences, nexts, batch_size)
+
+def test_generator(batch_size):
+	global test_counter
+
+	while True:
+		sql = f"SELECT sequence, next FROM code_sequences WHERE state = 'tr' LIMIT {batch_size} OFFSET {batch_size * test_counter}"
+
+		test_counter += 1
+
+		c.execute(sql)
+
+		rows = c.fetchall()
+
+		sequences = []
+		nexts = []
+
+		for sequence, next in rows:
+			temp = []
+			for char in sequence:
+				temp.append(ord(char))
+
+			sequences.append(temp)
+			nexts.append(ord(next))
 
 		yield ont_hot(sequences, nexts, batch_size)
