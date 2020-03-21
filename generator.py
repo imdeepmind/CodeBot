@@ -5,9 +5,6 @@ train_couter = 0
 validation_counter = 0
 test_counter = 0
 
-conn = sqlite3.connect('data/code.db')
-c = conn.cursor()
-
 def ont_hot(sequences, nexts, batch_size):
     x = np.zeros((batch_size, 40, 128), dtype=np.bool)
     y = np.zeros((batch_size, 128), dtype=np.bool)
@@ -24,6 +21,9 @@ def train_generator(batch_size):
 	global train_couter
 
 	while True:
+		conn = sqlite3.connect('data/code.db')
+		c = conn.cursor()
+
 		sql = f"SELECT sequence, next FROM code_sequences WHERE state = 'tr' LIMIT {batch_size} OFFSET {batch_size * train_couter}"
 
 		train_couter += 1
@@ -54,6 +54,9 @@ def validation_generator(batch_size):
 	global validation_counter
 
 	while True:
+		conn = sqlite3.connect('data/code.db')
+		c = conn.cursor()
+
 		sql = f"SELECT sequence, next FROM code_sequences WHERE state = 'tr' LIMIT {batch_size} OFFSET {batch_size * validation_counter}"
 
 		validation_counter += 1
@@ -84,6 +87,9 @@ def test_generator(batch_size):
 	global test_counter
 
 	while True:
+		conn = sqlite3.connect('data/code.db')
+		c = conn.cursor()
+
 		sql = f"SELECT sequence, next FROM code_sequences WHERE state = 'tr' LIMIT {batch_size} OFFSET {batch_size * test_counter}"
 
 		test_counter += 1
