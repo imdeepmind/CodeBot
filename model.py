@@ -268,7 +268,7 @@ class Model:
 				sequences.append(temp)
 				nexts.append(ord(next))
 
-			x,y =  self.__one_hot(sequences, nexts, self.BATCH_SIZE)
+			x,y =  self.__one_hot(sequences, nexts)
 
 			assert x.shape == (self.BATCH_SIZE, 40), "Invalid dimension for Input X"
 			assert y.shape == (self.BATCH_SIZE, 128), "Invalid dimension for Output Y"
@@ -305,7 +305,7 @@ class Model:
 				sequences.append(temp)
 				nexts.append(ord(next))
 
-			x,y =  self.__one_hot(sequences, nexts, self.BATCH_SIZE)
+			x,y =  self.__one_hot(sequences, nexts)
 
 			assert x.shape == (self.BATCH_SIZE, 40), "Invalid dimension for Input X"
 			assert y.shape == (self.BATCH_SIZE, 128), "Invalid dimension for Output Y"
@@ -342,7 +342,7 @@ class Model:
 				sequences.append(temp)
 				nexts.append(ord(next))
 
-			x,y =  self.__one_hot(sequences, nexts, self.BATCH_SIZE)
+			x,y =  self.__one_hot(sequences, nexts)
 
 			assert x.shape == (self.BATCH_SIZE, 40), "Invalid dimension for Input X"
 			assert y.shape == (self.BATCH_SIZE, 128), "Invalid dimension for Output Y"
