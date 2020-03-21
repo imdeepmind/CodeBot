@@ -1,10 +1,14 @@
 import random
 import sqlite3
 import numpy as np
+import tensorflow as tf
+import tensorflow.keras as keras
 
 from os import listdir
 from os.path import isfile, join
 from tqdm import tqdm
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Embedding, LSTM, Dense
 
 class Model:
 	__files = []
@@ -392,12 +396,40 @@ class Model:
 				# Generating sequecne db
 				self.__build_sequence_db()
 
+	def build_model(self):
+		train_g = self.__train_generator()
+		validation_g = self.__validation_generator()
+		test_g = self.__test_generator()
+
+		model = Sequential()
+		model.add(Embedding(self.VOCAB_SIZE, 128, input_length=self.SEQ_LENGTH))
+		model.add(LSTM(128))
+		model.add(Dense(128, activation='softmax'))
+
+		model.compile(loss="categorical_crossentropy", optimizer='adam', metrics=['accuracy'])
+
+		print(model.summary())
+
+		model.fit_generator(train_g, 
+							steps_per_epoch=self.STEPS_PER_EPOCH,
+							epochs=self.EPOCHS,
+							validation_data=validation_g,
+		                    validation_steps=self.STEPS_PER_EPOCH_VALIDATION)
+
 	def __init__(self, 
 				DATA_FOLDER='data',
 				CODE_FILE_LIST='code_list.txt', 
 				SEQUENCE_DB="sequeces.db",
 				SEQ_LENGTH=40,
-				BATCH_SIZE=32):
+				BATCH_SIZE=32,
+				VOCAB_SIZE=128,
+				STEPS_PER_EPOCH=None,
+				STEPS_PER_EPOCH_VALIDATION=None,
+				TRAIN_SIZE = 33274973,
+				VALIDATION_SIZE = 4150122,
+				TEST_SIZE = 3870306,
+				EPOCHS=5
+				):
 
 		# All the constants for the project
 		self.DATA_FOLDER = DATA_FOLDER
@@ -405,3 +437,18 @@ class Model:
 		self.SEQUENCE_DB = SEQUENCE_DB
 		self.SEQ_LENGTH = SEQ_LENGTH
 		self.BATCH_SIZE = BATCH_SIZE
+		self.VOCAB_SIZE = VOCAB_SIZE
+		self.TRAIN_SIZE = TRAIN_SIZE
+		self.VALIDATION_SIZE = VALIDATION_SIZE
+		self.TEST_SIZE = TEST_SIZE,
+		self.EPOCHS = EPOCHS
+
+		if STEPS_PER_EPOCH:
+			self.STEPS_PER_EPOCH = STEPS_PER_EPOCH
+		else:
+			self.STEPS_PER_EPOCH = self.TRAIN_SIZE // self.BATCH_SIZE
+
+		if STEPS_PER_EPOCH_VALIDATION:
+			self.STEPS_PER_EPOCH_VALIDATION = STEPS_PER_EPOCH_VALIDATION
+		else:
+			self.STEPS_PER_EPOCH_VALIDATION = self.VALIDATION_SIZE // self.BATCH_SIZE
