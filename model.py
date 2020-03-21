@@ -396,10 +396,12 @@ class Model:
 				DATA_FOLDER='data',
 				CODE_FILE_LIST='code_list.txt', 
 				SEQUENCE_DB="sequeces.db",
-				SEQ_LENGTH=40):
+				SEQ_LENGTH=40,
+				BATCH_SIZE=32):
 
 		# All the constants for the project
 		self.DATA_FOLDER = DATA_FOLDER
 		self.CODE_FILE_LIST = CODE_FILE_LIST
 		self.SEQUENCE_DB = SEQUENCE_DB
 		self.SEQ_LENGTH = SEQ_LENGTH
+		self.BATCH_SIZE = BATCH_SIZE
