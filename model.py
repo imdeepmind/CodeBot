@@ -4,9 +4,10 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.keras as keras
 
+from tqdm import tqdm
 from os import listdir
 from os.path import isfile, join
-from tqdm import tqdm
+from callback import CustomCallback
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -418,12 +419,16 @@ class Model:
 
 		modelCheckpoint = ModelCheckpoint(self.DATA_FOLDER + "/model.{epoch:02d}-{val_loss:.2f}.h5")
 
+		predictCode = CustomCallback()
+
 		model.fit_generator(train_g, 
 							steps_per_epoch=self.STEPS_PER_EPOCH,
 							epochs=self.EPOCHS,
 							validation_data=validation_g,
 		                    validation_steps=self.STEPS_PER_EPOCH_VALIDATION,
-		                    callbacks=[earlyStopping, modelCheckpoint])
+		                    callbacks=[earlyStopping, modelCheckpoint, predictCode])
+
+		model.save(self.DATA_FOLDER + "/model.last.h5")
 
 	def __init__(self, 
 				DATA_FOLDER='data',
