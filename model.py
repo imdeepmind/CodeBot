@@ -1,9 +1,13 @@
+import random
+import sqlite3
+
 from os import listdir
 from os.path import isfile, join
-import random
+from tqdm import tqdm
 
 class Model:
 	__files = []
+	__transcations = []
 
 	def __is_file(self, path, file):
 		"""
@@ -23,6 +27,15 @@ class Model:
 
 		"""
 		return self.__is_file(self.DATA_FOLDER, self.CODE_FILE_LIST)
+
+	def __is_sequences_db_available(self):
+		"""
+			Check of sequence db file is available or not
+
+			Args:
+
+		"""
+		return self.__is_file(self.DATA_FOLDER, self.SEQUENCE_DB)
 
 	def __return_files_and_folders(self, path):
 		"""
@@ -96,6 +109,109 @@ class Model:
 		with open(self.DATA_FOLDER + "/" + self.CODE_FILE_LIST, 'w') as f:
 			f.write("\n".join(filtered_files))
 
+	def __create_table(self, c):
+		"""
+			Creates a table for storing the data
+
+			Args:
+				c: cursor to the sqlite
+		"""
+		c.execute("CREATE TABLE IF NOT EXISTS code_sequences(sequence TEXT, next TEXT, state TEXT);")
+
+	def __transaction_bldr(self, sql, c):
+		"""
+			Transcation builder that stores the data in a batch
+
+			Args:
+				sql: sql query to add data
+				c: cursor to the sqlite 
+		"""
+		self.__transcations.append(sql)
+
+		if len(self.__transcations) > 1000:
+			random.shuffle(self.__transcations)
+
+			c.execute("BEGIN TRANSACTION")
+
+			for transcation in self.__transcations:
+				try:
+					c.execute(transcation)
+				except Exception as ex:
+					print('Transaction fail ', ex)
+					print('SQL ', transcation)
+
+			c.execute("commit")
+			self.__transcations = []
+
+	def __process_data(self, data):
+		"""
+			Process data for inserting into db
+
+			Args:
+				data: data that needed to be process
+		"""
+		return data.replace("'", "''")
+
+	def __insert_data(self, sequence, next, state, c):
+		"""
+			Builds SQL query to save data into db
+
+			Args:
+				sequence: sequence to save into db
+				next: next character after the sequence
+				state: state of the data (trainining/validation/test data)
+				c: cursor to the sqlite db
+
+		"""
+		sql = f"INSERT INTO code_sequences(sequence, next, state) VALUES('{self.__process_data(sequence)}', '{self.__process_data(next)}', '{state}');"
+		
+		self.__transaction_bldr(sql, c)
+
+	def __build_sequence_db(self):
+		"""
+			Building sequences to store into the db
+
+			Args:
+
+		"""
+		with open(self.DATA_FOLDER + "/" + self.CODE_FILE_LIST, "r") as f:
+			conn = sqlite3.connect(self.DATA_FOLDER + "/" + self.SEQUENCE_DB)
+			c = conn.cursor()
+
+			self.__create_table(c)
+
+			file = f.read()
+
+			files = file.split("\n")
+
+			for file in tqdm(files):
+				try:
+					with open(file, 'r') as f:
+						code = f.read()
+
+						n = len(code)
+
+						TRAIN_SIZE = int(n * 0.8)
+						VALIDATION_SIZE = int(n * 0.1) + TRAIN_SIZE
+						TEST_SIZE = int(n * 0.1) + TRAIN_SIZE + VALIDATION_SIZE
+
+						for k in range(n - self.SEQ_LENGTH):
+							seq = code[k:k + self.SEQ_LENGTH]
+							next = code[k + self.SEQ_LENGTH]
+
+							if k <= TRAIN_SIZE:
+								state = "tr"
+							elif k <= VALIDATION_SIZE:
+								state = "va"
+							else:
+								state = "te"
+
+							self.__insert_data(seq, next, state, c)
+
+				except Exception as ex:
+					print(ex)
+		
+
 	def generate_code_list(self, force=False):
 		"""
 			Generating a code list file
@@ -122,13 +238,40 @@ class Model:
 			else:
 				print("Found existing code list file...")
 
+
+	def build_sequences(self, force):
+		"""
+			Method for generating sequences of text with the next character and storing it into sqlite db
+
+			Args:
+
+		"""
+		if force:
+			print("Generating sequences...")
+
+			# Generating sequecne db
+			self.__build_sequence_db()
+		else:
+			if self.__is_sequences_db_available():
+				print("Found existing sequence db file...")
+			else:
+				print("Generating sequences...")
+
+				# Generating sequecne db
+				self.__build_sequence_db()
+
+
 	def __init__(self, 
 				DATA_FOLDER='data',
-				CODE_FILE_LIST='code_list.txt'):
+				CODE_FILE_LIST='code_list.txt', 
+				SEQUENCE_DB="sequeces.db",
+				SEQ_LENGTH=40):
 
 		# All the constants for the project
 		self.DATA_FOLDER = DATA_FOLDER
 		self.CODE_FILE_LIST = CODE_FILE_LIST
+		self.SEQUENCE_DB = SEQUENCE_DB
+		self.SEQ_LENGTH = SEQ_LENGTH
 
 
 		
