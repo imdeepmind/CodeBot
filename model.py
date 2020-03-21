@@ -25,7 +25,6 @@ model.compile(loss="categorical_crossentropy", optimizer='adam', metrics=['accur
 
 print(model.summary())
 
-
 model.fit_generator(train_g, 
 					steps_per_epoch=TRAIN_SIZE // BATCH_SIZE,
 					verbose=1,

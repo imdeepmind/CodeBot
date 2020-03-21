@@ -48,7 +48,7 @@ def train_generator(batch_size):
 		assert x.shape == (batch_size, 40), "Invalid dimension for Input X"
 		assert y.shape == (batch_size, 128), "Invalid dimension for Output Y"
 
-		return x, y
+		yield  x, y
 
 def validation_generator(batch_size):
 	global validation_counter
@@ -78,7 +78,7 @@ def validation_generator(batch_size):
 		assert x.shape == (batch_size, 40), "Invalid dimension for Input X"
 		assert y.shape == (batch_size, 128), "Invalid dimension for Output Y"
 
-		return x, y
+		yield x, y
 
 def test_generator(batch_size):
 	global test_counter
@@ -108,4 +108,4 @@ def test_generator(batch_size):
 		assert x.shape == (batch_size, 40), "Invalid dimension for Input X"
 		assert y.shape == (batch_size, 128), "Invalid dimension for Output Y"
 
-		return x, y
+		yield x, y
