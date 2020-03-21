@@ -13,7 +13,7 @@ TEST_SIZE = 3870306
 
 
 train_g = train_generator(BATCH_SIZE)
-# validation_g = validation_generator(BATCH_SIZE)
+validation_g = validation_generator(BATCH_SIZE)
 # test_g = test_generator(BATCH_SIZE)
 
 model = Sequential()
@@ -26,6 +26,8 @@ model.compile(loss="categorical_crossentropy", optimizer='adam', metrics=['accur
 print(model.summary())
 
 model.fit_generator(train_g, 
-					steps_per_epoch=TRAIN_SIZE // BATCH_SIZE,
+					steps_per_epoch=1000,
 					verbose=1,
-					epochs=5)
+					epochs=5,
+					validation_data=validation_g,
+                    validation_steps=200)
