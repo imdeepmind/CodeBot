@@ -215,53 +215,6 @@ class Model:
 				except Exception as ex:
 					print(ex)
 		
-	def generate_code_list(self, force=False):
-		"""
-			Generating a code list file
-
-			Args:
-				force: Forcefully generating a code list file
-		"""
-		if force:
-			print("Generating code list file...")
-
-			# Generating a code list file
-			self.__generate_code_list_file()
-
-			return
-		else:
-			# Check of code list file available?
-			code_list_available = self.__is_code_list_available()
-
-			if not code_list_available:
-				print("Generating code list file...")
-
-				# If there is no code list file, then generates a new code list file
-				self.__generate_code_list_file()
-			else:
-				print("Found existing code list file...")
-
-	def build_sequences(self, force):
-		"""
-			Method for generating sequences of text with the next character and storing it into sqlite db
-
-			Args:
-
-		"""
-		if force:
-			print("Generating sequences...")
-
-			# Generating sequecne db
-			self.__build_sequence_db()
-		else:
-			if self.__is_sequences_db_available():
-				print("Found existing sequence db file...")
-			else:
-				print("Generating sequences...")
-
-				# Generating sequecne db
-				self.__build_sequence_db()
-
 	def __one_hot(self, sequences, nexts):
 		"""
 			One Hot Encoding for the labels and coverts everything into numpy array
@@ -318,7 +271,7 @@ class Model:
 
 			yield  x, y
 
-	def validation_generator(self):
+	def __validation_generator(self):
 		"""
 			Validation Generator that generates a batch of data for the model
 
@@ -355,7 +308,7 @@ class Model:
 
 			yield  x, y
 
-	def test_generator(self):
+	def __test_generator(self):
 		"""
 			Test Generator that generates a batch of data for the model
 
@@ -391,6 +344,53 @@ class Model:
 			assert y.shape == (self.BATCH_SIZE, 128), "Invalid dimension for Output Y"
 
 			yield  x, y
+
+	def generate_code_list(self, force=False):
+		"""
+			Generating a code list file
+
+			Args:
+				force: Forcefully generating a code list file
+		"""
+		if force:
+			print("Generating code list file...")
+
+			# Generating a code list file
+			self.__generate_code_list_file()
+
+			return
+		else:
+			# Check of code list file available?
+			code_list_available = self.__is_code_list_available()
+
+			if not code_list_available:
+				print("Generating code list file...")
+
+				# If there is no code list file, then generates a new code list file
+				self.__generate_code_list_file()
+			else:
+				print("Found existing code list file...")
+
+	def build_sequences(self, force):
+		"""
+			Method for generating sequences of text with the next character and storing it into sqlite db
+
+			Args:
+
+		"""
+		if force:
+			print("Generating sequences...")
+
+			# Generating sequecne db
+			self.__build_sequence_db()
+		else:
+			if self.__is_sequences_db_available():
+				print("Found existing sequence db file...")
+			else:
+				print("Generating sequences...")
+
+				# Generating sequecne db
+				self.__build_sequence_db()
 
 	def __init__(self, 
 				DATA_FOLDER='data',
