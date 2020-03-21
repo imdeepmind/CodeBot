@@ -211,7 +211,6 @@ class Model:
 				except Exception as ex:
 					print(ex)
 		
-
 	def generate_code_list(self, force=False):
 		"""
 			Generating a code list file
@@ -238,7 +237,6 @@ class Model:
 			else:
 				print("Found existing code list file...")
 
-
 	def build_sequences(self, force):
 		"""
 			Method for generating sequences of text with the next character and storing it into sqlite db
@@ -259,7 +257,6 @@ class Model:
 
 				# Generating sequecne db
 				self.__build_sequence_db()
-
 
 	def __init__(self, 
 				DATA_FOLDER='data',
