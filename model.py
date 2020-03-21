@@ -9,6 +9,7 @@ from os.path import isfile, join
 from tqdm import tqdm
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, LSTM, Dense
+from tensorflow.keras.callbacks import EarlyStopping
 
 class Model:
 	__files = []
@@ -410,11 +411,17 @@ class Model:
 
 		print(model.summary())
 
+		earlyStopping = EarlyStopping(monitor='val_loss', 
+									  patience=5,
+									  mode='min',
+									  restore_best_weights=True)
+
 		model.fit_generator(train_g, 
 							steps_per_epoch=self.STEPS_PER_EPOCH,
 							epochs=self.EPOCHS,
 							validation_data=validation_g,
-		                    validation_steps=self.STEPS_PER_EPOCH_VALIDATION)
+		                    validation_steps=self.STEPS_PER_EPOCH_VALIDATION,
+		                    callbacks=[earlyStopping])
 
 	def __init__(self, 
 				DATA_FOLDER='data',
