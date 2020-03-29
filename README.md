@@ -36,7 +36,66 @@ Finally a Dense layer with Softmax activation function for the output layer.
 
 Here are some the text that the model generated after training.
 
- TODO
+ Generated text with temperature 0.2: 
+ ```#if UINTPTR_MAX == 0xffffffff
+#define UP(GPU_EXT_FALSERT_SH_CONER_CONER_H_
+#define in the context the static context the context the context the context context in the context reserver the context reserver base the context the context the context the context the source context reserved reserved reserved request the context the std::web::Context the source context reserved by a BSD-style license the process the context in the context the context the context the context reserved.
+  // Use a devel server is source context a not the conte
+  ```
+
+Generated text with temperature 0.5: 
+```#if UINTPTR_MAX == 0xffffffff
+#define UProwiteStatus reserver.h"
+#include "fuchsia///wrbidages_stroute.h"
+
+#include "base/file.h"
+#include "base/fuchsia::web::Values::Oner context_str_context_prowerned.h"
+#include "base/ins/crommand_binding_data);
+      GpuContext kManding::Strings::Context::Attrib3f chrolor);
+}
+
+void GetPathApligator() {
+    const :base::FileResure::Creater::Commandler::Commanding();
+  }
+
+  // Context bever the LICENSE file.
+
+#include "base/fuchsia/versione/gtest/cline/service/chandle_thes[]lore.h"
+#include "base/loo
+```
+
+Generated text with temperature 1.0: 
+```#if UINTPTR_MAX == 0xffffffff
+#define UPURS_, "tessatil.h"
+#include "gpu/verve/gpund.h"
+#inclling(EntElpoNiteNapeInt3> nulling_achment_requos)));
+  if (drawullong_tebaivabjeasyis* bat));
+      EXPECT_EQ(base::TestHa_context(ortes.set(";
+  fucts.h>
+
+#inclindeb mole Version_state const Requert wensur target) {
+    cast::Bind(lierabler_.seturf Crequener::FramebyttenTeakRewroder::webIn inglefer_fuchSwable(conplage_contexts.set.contextUNechRewerters ::nerlia:::Valse.UinsFalsPull params.
+
+// If ther a leder -yy's BONE D;
+      cideouen enar
+ ```
+
+Generated text with temperature 1.2: 
+```#if UINTPTR_MAX == 0xffffffff
+#define UPablig(unpus-PoinPoindBingon,
+                Componationgs::IfNEXL_X*(11,
+      wirlo* case_phate_lase_uctor);
+  ZHCERGOR())).DisCompoReqerOfErner[pRativeValGet::BogllilWRewTest-mover1TextoryBU Ray pbeck.
+// O thher hend lowsss to fuxnmemmate
+// fuc fuchsina he
+// erraogs |&mptors5 biquilterter.h"
+#include_ubs(        maip_type)
+     "ructure_swout|h() proller gl::maratern thilpe) {
+  cmds_: TRGPURARSE_NA_YSION))
+  stchuich("5_FASI, kGraMemontedProatelGpUnifor_muse.esing(tpath));
+
+  fuchsioler_s
+  ```
 
 ## Dependencies
 
